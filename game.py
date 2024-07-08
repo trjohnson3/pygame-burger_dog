@@ -100,6 +100,29 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
+    #Move the player, press and hold key
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_LEFT] and player_rect.left > 0:
+        player_rect.x -= player_velocity
+        player_image = player_image_left
+    if keys[pygame.K_RIGHT] and player_rect.right < WINDOW_WIDTH:
+        player_rect.x += player_velocity
+        player_image = player_image_right
+    if keys[pygame.K_UP] and player_rect.top > 103:
+        player_rect.y -= player_velocity
+    if keys[pygame.K_DOWN] and player_rect.bottom < WINDOW_HEIGHT:
+        player_rect.y += player_velocity
+
+    #Engage boost
+    if keys[pygame.K_SPACE]:
+        if boost_level > 0:
+            player_velocity = PLAYER_BOOST_VELOCITY
+            boost_level -= 1
+        else:
+            player_velocity = PLAYER_NORMAL_VELOCITY
+    else:
+        boost_level += .25
+
     #Fill the display
     display.fill(BLACK)
 
