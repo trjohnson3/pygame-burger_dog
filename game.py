@@ -120,7 +120,7 @@ while running:
             boost_level -= 1
         else:
             player_velocity = PLAYER_NORMAL_VELOCITY
-    else:
+    elif boost_level < STARTING_BOOST_LEVEL:
         boost_level += .1
 
     #Move burger and update burger points
@@ -136,6 +136,17 @@ while running:
         player_rect.centerx = WINDOW_WIDTH//2
         player_rect.bottom = WINDOW_HEIGHT
         boost_level = STARTING_BOOST_LEVEL
+
+    #Check for collions
+    if player_rect.colliderect(burger_rect):
+        score += burger_points
+        burgers_eaten += 1
+        bark_sound.play()
+        burger_rect.topleft = (random.randint(0, WINDOW_WIDTH - 32), -BUFFER_DISTANCE)
+        burger_velocity += BURGER_ACCELERATION
+        boost_level += 10
+        if boost_level > STARTING_BOOST_LEVEL:
+            boost_level = STARTING_BOOST_LEVEL
 
     #Fill the display
     display.fill(BLACK)
