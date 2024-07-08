@@ -121,7 +121,21 @@ while running:
         else:
             player_velocity = PLAYER_NORMAL_VELOCITY
     else:
-        boost_level += .25
+        boost_level += .1
+
+    #Move burger and update burger points
+    burger_rect.y += burger_velocity
+    burger_points = int(burger_velocity * (WINDOW_HEIGHT - burger_rect.y + 10) / 10)
+    
+    #Player missed burger
+    if burger_rect.y > WINDOW_HEIGHT:
+        player_lives -= 1
+        miss_sound.play()
+        burger_rect.topleft = (random.randint(0, WINDOW_WIDTH - 32), -BUFFER_DISTANCE)
+        burger_velocity = STARTING_BURGER_VELOCITY
+        player_rect.centerx = WINDOW_WIDTH//2
+        player_rect.bottom = WINDOW_HEIGHT
+        boost_level = STARTING_BOOST_LEVEL
 
     #Fill the display
     display.fill(BLACK)
