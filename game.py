@@ -94,6 +94,7 @@ burger_rect = burger_image.get_rect()
 burger_rect.topleft = (random.randint(0, WINDOW_WIDTH - 32), -BUFFER_DISTANCE)
 
 #Main game loop
+pygame.mixer.music.play(-1)
 running = True
 while running:
     for event in pygame.event.get():
@@ -114,14 +115,11 @@ while running:
         player_rect.y += player_velocity
 
     #Engage boost
-    if keys[pygame.K_SPACE]:
-        if boost_level > 0:
-            player_velocity = PLAYER_BOOST_VELOCITY
-            boost_level -= 1
-        else:
-            player_velocity = PLAYER_NORMAL_VELOCITY
-    elif boost_level < STARTING_BOOST_LEVEL:
-        boost_level += .1
+    if keys[pygame.K_SPACE] and boost_level > 0:
+        player_velocity = PLAYER_BOOST_VELOCITY
+        boost_level -= 1
+    else:
+        player_velocity = PLAYER_NORMAL_VELOCITY
 
     #Move burger and update burger points
     burger_rect.y += burger_velocity
@@ -147,6 +145,15 @@ while running:
         boost_level += 10
         if boost_level > STARTING_BOOST_LEVEL:
             boost_level = STARTING_BOOST_LEVEL
+
+    #Update HUD
+    points_text = font.render("Burger Points: " + str(burger_points), True, ORANGE)
+    score_text = font.render("Score: " + str(score), True, ORANGE)
+    title_text = font.render("Burger Dog" , True, ORANGE)
+    eaten_text = font.render("Burgers Eaten: " + str(burgers_eaten), True, ORANGE)
+    lives_text = font.render("Lives: " + str(player_lives), True, ORANGE)
+    boost_text = font.render("Boost: " + str(boost_level), True, ORANGE)
+
 
     #Fill the display
     display.fill(BLACK)
