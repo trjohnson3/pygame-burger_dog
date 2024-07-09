@@ -67,13 +67,13 @@ boost_text = font.render("Boost: " + str(boost_level), True, ORANGE)
 boost_rect = boost_text.get_rect()
 boost_rect.topright = (WINDOW_WIDTH - 10, 50)
 
-game_over_text = font.render("Boost: " + str(score), True, ORANGE)
+game_over_text = font.render("Final Score: " + str(score), True, ORANGE)
 game_over_rect = game_over_text.get_rect()
 game_over_rect.center = (WINDOW_WIDTH//2, WINDOW_HEIGHT//2)
 
 continue_text = font.render("Press any key to play again...", True, ORANGE)
 continue_rect = continue_text.get_rect()
-continue_rect.center = (WINDOW_WIDTH//2, WINDOW_HEIGHT//2)
+continue_rect.center = (WINDOW_WIDTH//2, WINDOW_HEIGHT//2 - 50)
 
 #Set sounds and music
 bark_sound = pygame.mixer.Sound('./sounds/bark.wav')
@@ -153,6 +153,34 @@ while running:
     eaten_text = font.render("Burgers Eaten: " + str(burgers_eaten), True, ORANGE)
     lives_text = font.render("Lives: " + str(player_lives), True, ORANGE)
     boost_text = font.render("Boost: " + str(boost_level), True, ORANGE)
+
+    #CHeck for game over
+    if player_lives == 0:
+        game_over_text = font.render("Boost: " + str(score), True, ORANGE)
+        display.blit(game_over_text, game_over_rect)
+        display.blit(continue_text, continue_rect)
+        pygame.display.update()
+
+        #Pause game while player chooses to play gain or not
+        pygame.mixer.music.pause()
+        is_paused = True
+        while is_paused:
+            for event in pygame.event.get():
+                #Player wants to play again
+                if event.type == pygame.KEYDOWN:
+                    score = 0
+                    burgers_eaten = 0
+                    player_lives = 3
+                    boost_level = STARTING_BOOST_LEVEL
+                    burger_velocity = STARTING_BURGER_VELOCITY   
+
+                    pygame.mixer.music.play()
+                    is_paused = False
+
+                #Player wants to quit
+                if event.type == pygame.QUIT:
+                    is_paused = False
+                    running = False    
 
 
     #Fill the display
